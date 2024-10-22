@@ -107,7 +107,7 @@ func New(opts ...Option) (*SPVWallet, error) {
 		HTTP: spv.http,
 	}
 	spv.configurationsAPI = &configurations.API{
-		Addr: spv.addr + "v1/configs",
+		Addr: spv.addr + "/configs",
 		HTTP: spv.http,
 	}
 	return &spv, nil

@@ -1,14 +1,13 @@
 package transactions
 
 import (
+	"errors"
 	"fmt"
-	"net/http"
 	"net/url"
 	"reflect"
 	"strings"
 	"time"
 
-	"github.com/bitcoin-sv/spv-wallet/models"
 	"github.com/bitcoin-sv/spv-wallet/models/filter"
 )
 
@@ -45,7 +44,7 @@ func (m *MetadataFilterQueryBuilder) Build() (url.Values, error) {
 
 func (m *MetadataFilterQueryBuilder) dfs(depth int, path *strings.Builder, val any, ans *strings.Builder, pref string) error {
 	if depth > m.MaxDepth {
-		return NewErrMetadataFilterMaxDepthExceeded(m.MaxDepth, depth)
+		return fmt.Errorf("%w - max depth: %d", ErrMetadataFilterMaxDepthExceeded, m.MaxDepth)
 	}
 
 	t := reflect.TypeOf(val)
@@ -99,14 +98,7 @@ func (m *MetadataFilterQueryBuilder) sliceDfs(depth int, val any, path *strings.
 	return nil
 }
 
-func NewErrMetadataFilterMaxDepthExceeded(max, depth int) error {
-	err := models.SPVError{
-		Code:       "metadata-filter-max-depth-exceeded-failure",
-		Message:    fmt.Sprintf("maximum depth [%d] of nesting in map exceeded [%d]", max, depth),
-		StatusCode: http.StatusBadRequest,
-	}
-	return err
-}
+var ErrMetadataFilterMaxDepthExceeded = errors.New("maximum depth of nesting in metadata map exceeded")
 
 func TrimLastAmpersand(s string) string {
 	if len(s) > 0 && s[len(s)-1] == '&' {

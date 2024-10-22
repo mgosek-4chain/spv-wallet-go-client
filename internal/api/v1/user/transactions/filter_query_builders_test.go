@@ -7,7 +7,7 @@ import (
 
 	"github.com/bitcoin-sv/spv-wallet-go-client/internal/api/v1/user/transactions"
 	"github.com/bitcoin-sv/spv-wallet/models/filter"
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestMetadataFilterQueryBuilder(t *testing.T) {
@@ -144,7 +144,7 @@ func TestMetadataFilterQueryBuilder(t *testing.T) {
 				},
 			},
 			depth:       3,
-			expectedErr: transactions.NewErrMetadataFilterMaxDepthExceeded(2, 4),
+			expectedErr: transactions.ErrMetadataFilterMaxDepthExceeded,
 		},
 	}
 
@@ -155,8 +155,8 @@ func TestMetadataFilterQueryBuilder(t *testing.T) {
 				Metadata: tc.metadata,
 			}
 			got, err := mp.Build()
-			assert.ErrorIs(t, tc.expectedErr, err)
-			assert.Equal(t, tc.expectedParams, got)
+			require.ErrorIs(t, err, tc.expectedErr)
+			require.Equal(t, tc.expectedParams, got)
 		})
 	}
 }
@@ -264,8 +264,8 @@ func TestModelFilterQueryBuilder(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			m := transactions.ModelFilterQueryBuilder{ModelFilter: tc.filter}
 			got, err := m.Build()
-			assert.ErrorIs(t, tc.expectedErr, err)
-			assert.Equal(t, tc.expectedParams, got)
+			require.ErrorIs(t, tc.expectedErr, err)
+			require.Equal(t, tc.expectedParams, got)
 		})
 	}
 }
@@ -334,8 +334,8 @@ func TestQueryParamsFilterQueryBuilder(t *testing.T) {
 				QueryParamsFilter: tc.filter,
 			}
 			got, err := qp.Build()
-			assert.ErrorIs(t, tc.expectedErr, err)
-			assert.Equal(t, tc.expectedParams, got)
+			require.ErrorIs(t, tc.expectedErr, err)
+			require.Equal(t, tc.expectedParams, got)
 		})
 	}
 }
@@ -518,8 +518,8 @@ func TestTransactionFilterQueryBuilder(t *testing.T) {
 				TransactionFilter:       tc.filter,
 			}
 			got, err := tfp.Build()
-			assert.ErrorIs(t, tc.expectedErr, err)
-			assert.Equal(t, tc.expectedParams, got)
+			require.ErrorIs(t, tc.expectedErr, err)
+			require.Equal(t, tc.expectedParams, got)
 		})
 	}
 }
