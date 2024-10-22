@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	xPriv := "xprv9s21ZrQH143K3xqwhES2ujnTYsbCq79ZD2WX9WzZpJB3ACnYAaRQSxmPf6KxYFFVPqg9XKg3b3tx4gCkhPmmMrskZhHUfKZL3kUDXyfkSx4"
+	xPriv := ""
 	opt := client.WithXPub(xPriv)
 	spv, err := client.New(opt)
 	if err != nil {
@@ -19,7 +19,7 @@ func main() {
 
 	ctx := context.Background()
 
-	ID := "e2a500ca70d0195ec09ae9faf5b1e17528ef9ad530f8c56972b18a7634bb6c5a"
+	ID := ""
 	t, err := spv.Transaction(ctx, ID)
 	if err != nil {
 		log.Fatal(err)

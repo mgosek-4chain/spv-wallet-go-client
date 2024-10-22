@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	xPriv := "xprv9s21ZrQH143K3xqwhES2ujnTYsbCq79ZD2WX9WzZpJB3ACnYAaRQSxmPf6KxYFFVPqg9XKg3b3tx4gCkhPmmMrskZhHUfKZL3kUDXyfkSx4"
+	xPriv := ""
 	opt := client.WithXPriv(xPriv)
 	spv, err := client.New(opt)
 	if err != nil {
