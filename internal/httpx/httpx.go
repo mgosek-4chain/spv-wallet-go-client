@@ -56,8 +56,9 @@ func (h *HTTP) Do(ctx context.Context, method, URL string, body any) (*http.Resp
 
 func SpvError(res *http.Response) error {
 	var dst models.SPVError
-	if err := json.NewDecoder(res.Body).Decode(&dst); err != nil {
-		return err
+	dec := json.NewDecoder(res.Body)
+	if err := dec.Decode(&dst); err != nil {
+		return fmt.Errorf("json decode op failure: %w", err)
 	}
 	dst.StatusCode = res.StatusCode
 	return dst

@@ -96,7 +96,8 @@ func (a *API) UpdateTransactionMetadata(ctx context.Context, r UpdateTransaction
 }
 
 func (a *API) Transaction(ctx context.Context, ID string) (*response.Transaction, error) {
-	res, err := a.HTTP.Get(ctx, a.Addr)
+	URL := fmt.Sprintf("%s/%s", a.Addr, ID)
+	res, err := a.HTTP.Get(ctx, URL)
 	if err != nil {
 		return nil, err
 	}
@@ -114,7 +115,12 @@ func (a *API) Transaction(ctx context.Context, ID string) (*response.Transaction
 }
 
 func (a *API) Transactions(ctx context.Context, opts ...QueryBuilderOption) ([]*response.Transaction, error) {
-	res, err := a.HTTP.Get(ctx, a.Addr)
+	params, err := NewQueryBuilder(opts...).Build()
+	if err != nil {
+		return nil, err
+	}
+	URL := fmt.Sprintf("%s/?%s", a.Addr, params.Encode())
+	res, err := a.HTTP.Get(ctx, URL)
 	if err != nil {
 		return nil, err
 	}

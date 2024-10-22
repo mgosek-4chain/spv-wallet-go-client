@@ -6,8 +6,8 @@ import (
 	"time"
 
 	bip32 "github.com/bitcoin-sv/go-sdk/compat/bip32"
-	"github.com/bitcoin-sv/spv-wallet-go-client/internal/api/configurations"
-	"github.com/bitcoin-sv/spv-wallet-go-client/internal/api/transactions"
+	"github.com/bitcoin-sv/spv-wallet-go-client/internal/api/v1/user/configurations"
+	"github.com/bitcoin-sv/spv-wallet-go-client/internal/api/v1/user/transactions"
 	"github.com/bitcoin-sv/spv-wallet-go-client/internal/httpx"
 	"github.com/bitcoin-sv/spv-wallet/models/response"
 )
@@ -107,7 +107,7 @@ func New(opts ...Option) (*SPVWallet, error) {
 		HTTP: spv.http,
 	}
 	spv.configurationsAPI = &configurations.API{
-		Addr: spv.addr + "/configs",
+		Addr: spv.addr + "v1/configs",
 		HTTP: spv.http,
 	}
 	return &spv, nil

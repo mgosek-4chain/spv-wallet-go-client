@@ -1,15 +1,14 @@
 package transactions_test
 
 import (
-	"net/http"
+	"errors"
 	"net/url"
 	"testing"
 	"time"
 
-	"github.com/bitcoin-sv/spv-wallet-go-client/internal/api/transactions"
-	"github.com/bitcoin-sv/spv-wallet/models"
+	"github.com/bitcoin-sv/spv-wallet-go-client/internal/api/v1/user/transactions"
 	"github.com/bitcoin-sv/spv-wallet/models/filter"
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestQueryBuilder(t *testing.T) {
@@ -130,7 +129,7 @@ func TestQueryBuilder(t *testing.T) {
 				},
 			},
 			builder:     &FilterQueryBuilderFailureStub{},
-			expectedErr: transactions.NewErrFilterQueryBuilder("FilterQueryBuilderFailureStub"),
+			expectedErr: transactions.ErrFilterQueryBuilder,
 		},
 	}
 
@@ -144,20 +143,14 @@ func TestQueryBuilder(t *testing.T) {
 			}
 			qb := transactions.NewQueryBuilder(opts...)
 			got, err := qb.Build()
-			assert.ErrorIs(t, tc.expectedErr, err)
-			assert.Equal(t, tc.expectedParams, got)
+			require.ErrorIs(t, err, tc.expectedErr)
+			require.Equal(t, tc.expectedParams, got)
 		})
 	}
 }
 
 type FilterQueryBuilderFailureStub struct{}
 
-func (f FilterQueryBuilderFailureStub) String() string { return "FilterQueryBuilderAlwaysFailure" }
-
 func (f *FilterQueryBuilderFailureStub) Build() (url.Values, error) {
-	return nil, models.SPVError{
-		Message:    "internal transactions query build op failure",
-		StatusCode: http.StatusInternalServerError,
-		Code:       "internal-transaction-query-parameters-build-failure",
-	}
+	return nil, errors.New("filter query builder failure stub - query build op failure")
 }

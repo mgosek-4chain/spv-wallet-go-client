@@ -7,7 +7,7 @@ import (
 
 	client "github.com/bitcoin-sv/spv-wallet-go-client"
 	"github.com/bitcoin-sv/spv-wallet-go-client/example/exampleutil"
-	"github.com/bitcoin-sv/spv-wallet-go-client/internal/api/transactions"
+	"github.com/bitcoin-sv/spv-wallet-go-client/internal/api/v1/user/transactions"
 	"github.com/bitcoin-sv/spv-wallet/models/response"
 )
 

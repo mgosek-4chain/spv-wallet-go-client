@@ -1,0 +1,49 @@
+@startuml
+!define LIGHTORANGE
+!includeurl https://raw.githubusercontent.com/Drakemor/RedDress-PlantUML/master/style.puml
+ 
+skinparam linetype ortho
+
+package internal {
+    
+    package httpx  {
+        artifact httpx.go
+        artifact httpx_test.go
+        artifact auth.go
+        artifact auth_test.go
+    }
+
+    package api {
+        package v1 {
+            package user {
+                package transactions {
+                    artifact transactions.go
+                    artifact transactions_test.go 
+                }
+                package configurations {
+                    artifact configurations.go
+                    artifact configurations_test.go
+                }
+            }
+        }
+            package v2 {
+                package example1 
+                package example2 
+            }
+    }
+}
+
+ 
+package client {
+    artifact spv_wallet_client.go
+}
+
+client ..> transactions: <<uses>>
+client ..> configurations: <<uses>>
+client ..> httpx: <<uses>> 
+ 
+ 
+
+
+
+

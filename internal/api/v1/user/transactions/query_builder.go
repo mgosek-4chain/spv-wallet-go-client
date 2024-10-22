@@ -1,11 +1,9 @@
 package transactions
 
 import (
-	"fmt"
-	"net/http"
+	"errors"
 	"net/url"
 
-	"github.com/bitcoin-sv/spv-wallet/models"
 	"github.com/bitcoin-sv/spv-wallet/models/filter"
 )
 
@@ -42,7 +40,6 @@ func WithFilterQueryBuilder(b FilterQueryBuilder) QueryBuilderOption {
 
 type FilterQueryBuilder interface {
 	Build() (url.Values, error)
-	String() string
 }
 
 type QueryBuilder struct {
@@ -54,7 +51,7 @@ func (q *QueryBuilder) Build() (url.Values, error) {
 	for _, b := range q.builders {
 		bparams, err := b.Build()
 		if err != nil {
-			return nil, NewErrFilterQueryBuilder(b.String()).Wrap(err)
+			return nil, errors.Join(err, ErrFilterQueryBuilder)
 		}
 		if len(bparams) > 0 {
 			params.Append(bparams)
@@ -71,11 +68,4 @@ func NewQueryBuilder(opts ...QueryBuilderOption) *QueryBuilder {
 	return &qb
 }
 
-func NewErrFilterQueryBuilder(s string) models.SPVError {
-	err := models.SPVError{
-		Message:    fmt.Sprintf("failed to build transactions query parameters - filter query builder: %s", s),
-		StatusCode: http.StatusInternalServerError,
-		Code:       "filter-query-builder-transactions-parameters-build-failure",
-	}
-	return err
-}
+var ErrFilterQueryBuilder = errors.New("transactions - filter query builder - build op failure")

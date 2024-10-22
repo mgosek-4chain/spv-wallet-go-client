@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/bitcoin-sv/spv-wallet-go-client/internal/api/transactions"
+	"github.com/bitcoin-sv/spv-wallet-go-client/internal/api/v1/user/transactions"
 	"github.com/bitcoin-sv/spv-wallet/models/filter"
 	"github.com/stretchr/testify/assert"
 )

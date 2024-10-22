@@ -1,0 +1,61 @@
+@startuml
+!define LIGHTORANGE
+!includeurl https://raw.githubusercontent.com/Drakemor/RedDress-PlantUML/master/style.puml
+skinparam linetype ortho
+
+title "Components composition diagram - high level design."
+
+struct TransactionsAPI {
+    + RecordTransaction(ctx context.Context, r RecordTransactionRequest): (*response.Transaction, error)
+    + DraftTransaction(ctx context.Context, r DraftTransactionRequest): (*response.DraftTransaction, error)
+    + UpdateTransactionMetadata(ctx context.Context, r UpdateTransactionMetadataRequest): (*response.Transaction, error)
+    + Transaction(ctx context.Context, ID string): (*response.Transaction, error)
+    + Transactions(ctx context.Context, opts ...QueryBuilderOption) :([]*response.Transaction, error)
+}
+
+struct ConfigurationsAPI {
+    + SharedConfig(ctx context.Context): (*response.SharedConfig, error
+}
+
+struct SPVWallet {
+    --
+    + New(opts ...Option) (*SPVWallet, error)
+}
+
+struct HTTP {
+    - cli *http.Client
+    --
+    + Get(ctx context.Context, URL string): (*http.Response, error)
+    + Patch(ctx context.Context, URL string, body any): (*http.Response, error)
+    + Post(ctx context.Context, URL string, body any): (*http.Response, error)
+    + Do(ctx context.Context, method, URL string, body any): (*http.Response, error)
+}
+
+struct AuthHeaderAppender{
+    + Apppend(req *http.Header): error
+}
+
+' Relations '
+SPVWallet *-right- ConfigurationsAPI
+SPVWallet *-down- TransactionsAPI
+SPVWallet *-up- HTTP
+
+HTTP *-right-AuthHeaderAppender
+
+' Notes '
+note left of SPVWallet
+1. Aggregates all needed service dependencies
+2. Provides API for accessing spv-wallet service. 
+end note 
+
+' Notes '
+note left of HTTP
+1. Abstraction over HTTP client
+2. Manages authentication workflow   
+end note 
+
+' Notes '
+note right of AuthHeaderAppender
+1. Encapsulates logic for building authentication headers 
+depending on auth type set in SPVWalletClient.
+end note 

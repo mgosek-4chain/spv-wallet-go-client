@@ -99,8 +99,6 @@ func (m *MetadataFilterQueryBuilder) sliceDfs(depth int, val any, path *strings.
 	return nil
 }
 
-func (m MetadataFilterQueryBuilder) String() string { return "MetadataFilterQueryBuilder" }
-
 func NewErrMetadataFilterMaxDepthExceeded(max, depth int) error {
 	err := models.SPVError{
 		Code:       "metadata-filter-max-depth-exceeded-failure",
@@ -129,8 +127,6 @@ func (m *ModelFilterQueryBuilder) Build() (url.Values, error) {
 	return params.Values, nil
 }
 
-func (m ModelFilterQueryBuilder) String() string { return "ModelFilterQueryBuilder" }
-
 type QueryParamsFilterQueryBuilder struct {
 	QueryParamsFilter filter.QueryParams
 }
@@ -143,8 +139,6 @@ func (q *QueryParamsFilterQueryBuilder) Build() (url.Values, error) {
 	params.AddPair("sort", q.QueryParamsFilter.SortDirection)
 	return params.Values, nil
 }
-
-func (q QueryParamsFilterQueryBuilder) String() string { return "QueryParamsFilterQueryBuilder" }
 
 type TransactionFilterQueryBuilder struct {
 	TransactionFilter       filter.TransactionFilter
@@ -174,8 +168,6 @@ func (t *TransactionFilterQueryBuilder) Build() (url.Values, error) {
 	params.AddPair("status", t.TransactionFilter.Status)
 	return params.Values, nil
 }
-
-func (t TransactionFilterQueryBuilder) String() string { return "TransactionFilterQueryBuilder" }
 
 type ExtendedURLValues struct {
 	url.Values
